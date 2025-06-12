@@ -1,6 +1,6 @@
 /*
 * Script Name: Plan Manager
-* Version: v1.2.5
+* Version: v1.2.7
 * Last Updated: 2026-06-12
 * Author: SaveBank, gitnik (mobile fix)
 * Author Contact: Discord: savebank, gitnik
@@ -153,8 +153,6 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
             twSDK.redirectTo('overview_villages&combined');
             return;
         }
-
-        UI.InfoMessage('Is Mobile: ' + IS_MOBILE);
 
         const { worldUnitInfo, worldConfig, tribes, players, villages } = await fetchWorldConfigData();
         const villageMap = new Map();
@@ -1030,51 +1028,80 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                 let isDeleteButton = buttonId.includes('buttondelete');
 
                 if (isSendButton) {
-                    let sendButton = document.createElement("button");
+                  if (IS_MOBILE) {
+                    let sendButton = document.createElement("a");
                     sendButton.innerHTML = "Send";
                     sendButton.id = buttonId + "Send";
                     sendButton.classList.add("btn");
-
-                    let sendLink = '';
 
                     let [planId, _, commandId] = buttonId.split('-').map((x, i) => i !== 1 ? parseInt(x) : x);
                     let key;
                     for (key in sbPlans[planId]) {
                         if (sbPlans[planId][key].commandId === commandId) {
-                            let originVillageId = parseInt(sbPlans[planId][key].originVillageId);
-                            let targetVillageId = parseInt(sbPlans[planId][key].targetVillageId);
-                            let trCommandId = sbPlans[planId][key].trCommandId;
-                            let type = sbPlans[planId][key].type;
-                            let units = sbPlans[planId][key].units;
-                            sendLink = generateLink(originVillageId, targetVillageId, units, trCommandId, type, IS_MOBILE);
-                            if (parseBool(sbPlans[planId][key].sent)) {
-                                sendButton.classList.add("btn-confirm-yes");
-                            }
+                            sbPlans[planId][key].sent = true;
                             break;
                         }
                     }
+                    sendButton.classList.add("btn-confirm-yes");
+                    let originVillageId = parseInt(sbPlans[planId][key].originVillageId);
+                    let targetVillageId = parseInt(sbPlans[planId][key].targetVillageId);
+                    let trCommandId = sbPlans[planId][key].trCommandId;
+                    let type = sbPlans[planId][key].type;
+                    let units = sbPlans[planId][key].units;
+                    sendButton.href = generateLink(originVillageId, targetVillageId, units, trCommandId, type, IS_MOBILE);
 
-                    if (IS_MOBILE) {
-                        sendButton.href = sendLink;
-                    }
-
+                    let sendParent = document.getElementById(buttonId);
+                    sendParent.appendChild(sendButton);
+                  } else {
+                    let sendButton = document.createElement("button");
+                    sendButton.innerHTML = "Send";
+                    sendButton.id = buttonId + "Send";
+                    sendButton.classList.add("btn");
                     sendButton.onclick = function () {
-                        if (IS_MOBILE) {
-                            return;
+                        let [planId, _, commandId] = buttonId.split('-').map((x, i) => i !== 1 ? parseInt(x) : x);
+                        let key;
+                        for (key in sbPlans[planId]) {
+                            if (sbPlans[planId][key].commandId === commandId) {
+                                sbPlans[planId][key].sent = true;
+                                break;
+                            }
                         }
                         sendButton.classList.add("btn-confirm-yes");
+                        let originVillageId = parseInt(sbPlans[planId][key].originVillageId);
+                        let targetVillageId = parseInt(sbPlans[planId][key].targetVillageId);
+                        let trCommandId = sbPlans[planId][key].trCommandId;
+                        let type = sbPlans[planId][key].type;
+                        let units = sbPlans[planId][key].units;
                         modifyPlan(parseInt(planId), sbPlans[planId]);
                         if (DEBUG) console.debug(`${scriptInfo} Sending command from village ${originVillageId} to village ${targetVillageId}`);
-                        window.open(sendLink, '_blank');
+                        let sendLink = generateLink(originVillageId, targetVillageId, units, trCommandId, type, IS_MOBILE);
+                        UI.InfoMessage(
+                          'Is Mobile: ' + IS_MOBILE, ' Link: ' + sendLink
+                        );
+                        if (IS_MOBILE) {
+                            window.location.href = sendLink;
+                        } else {
+                            window.open(sendLink, '_blank');
+                        }
                     }
                     sendButton.addEventListener('keydown', function (event) {
                         if (event.key === 'Enter') {
                             event.preventDefault();
                         }
                     });
-
+                    let [planId, _, commandId] = buttonId.split('-').map((x, i) => i !== 1 ? parseInt(x) : x);
+                    let key;
+                    for (key in sbPlans[planId]) {
+                        if (parseInt(sbPlans[planId][key].commandId) === commandId) {
+                            if (parseBool(sbPlans[planId][key].sent)) {
+                                sendButton.classList.add("btn-confirm-yes");
+                            }
+                            break;
+                        }
+                    }
                     let sendParent = document.getElementById(buttonId);
                     sendParent.appendChild(sendButton);
+                  }
                 }
                 if (isDeleteButton) {
                     let deleteButton = document.createElement("button");

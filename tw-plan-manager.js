@@ -1,8 +1,8 @@
 /*
 * Script Name: Plan Manager
-* Version: v1.2.1
+* Version: v1.2.3
 * Last Updated: 2025-04-22
-* Author: SaveBank
+* Author: SaveBank, gitnik (mobile fix)
 * Author Contact: Discord: savebank 
 * Approved: Yes
 * Approved Date: 2024-05-02

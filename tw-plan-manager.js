@@ -1059,9 +1059,12 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                     let units = sbPlans[planId][key].units;
                     UI.InfoMessage('5');
                     try {
-                    sendButton.href = generateLink(originVillageId, targetVillageId, units, trCommandId, type, IS_MOBILE);
+                      const link = generateLink(originVillageId, targetVillageId, units, trCommandId, type, IS_MOBILE);
+                      UI.InfoMessage('Link: ' + link);
+                      sendButton.href = link;
                     } catch (error) {
-                      UI.InfoMessage('Error: ' + error);
+                      UI.InfoMessage('Error: ' + error.message);
+                      return;
                     }
 
                     UI.InfoMessage('6');

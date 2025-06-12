@@ -1,8 +1,8 @@
 /*
 * Script Name: Plan Manager
-* Version: v1.2.2
+* Version: v1.2.1
 * Last Updated: 2025-04-22
-* Author: SaveBank, gitnik (mobile fix)
+* Author: SaveBank
 * Author Contact: Discord: savebank 
 * Approved: Yes
 * Approved Date: 2024-05-02
@@ -569,7 +569,11 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                 let delay = 200;
                 for (let link of commandsToSend) {
                     setTimeout(() => {
-                        window.open(link, IS_MOBILE ? undefined : '_blank');
+                        if (IS_MOBILE) {
+                            window.location.href = link;
+                        } else {
+                            window.open(link, '_blank');
+                        }
                     }, delay);
                     delay += 200;
                 }
@@ -599,7 +603,11 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                 let delay = 0;
                 for (let link of commandsToSend) {
                     setTimeout(() => {
-                        window.open(link, IS_MOBILE ? undefined : '_blank');
+                        if (IS_MOBILE) {
+                            window.location.href = link;
+                        } else {
+                            window.open(link, '_blank');
+                        }
                     }, delay);
                     delay += 200;
                 }
@@ -1050,7 +1058,11 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                         modifyPlan(parseInt(planId), sbPlans[planId]);
                         if (DEBUG) console.debug(`${scriptInfo} Sending command from village ${originVillageId} to village ${targetVillageId}`);
                         let sendLink = generateLink(originVillageId, targetVillageId, units, trCommandId, type);
-                        window.open(sendLink, IS_MOBILE ? undefined : '_blank');
+                        if (IS_MOBILE) {
+                            window.location.href = sendLink;
+                        } else {
+                            window.open(sendLink, '_blank');
+                        }
                     }
                     sendButton.addEventListener('keydown', function (event) {
                         if (event.key === 'Enter') {

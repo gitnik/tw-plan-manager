@@ -559,7 +559,7 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                 });
                 let commandsToSend = [];
                 for (let command of plan) {
-                    commandsToSend.push(generateLink(parseInt(command.originVillageId), parseInt(command.targetVillageId), command.units, command.trCommandId, command.type));
+                    commandsToSend.push(generateLink(parseInt(command.originVillageId), parseInt(command.targetVillageId), command.units, command.trCommandId, command.type, IS_MOBILE));
                     command.sent = true;
                     $('#' + command.buttonSendId + ' button').addClass('btn-confirm-yes');
                     if (commandsToSend.length >= number) break;
@@ -594,7 +594,7 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                     let sendTimestamp = parseInt(command.sendTimestamp);
                     let remainingTimestamp = parseInt(sendTimestamp - timeNow);
                     if (remainingTimestamp > time) continue;
-                    commandsToSend.push(generateLink(parseInt(command.originVillageId), parseInt(command.targetVillageId), command.units, command.trCommandId, command.type));
+                    commandsToSend.push(generateLink(parseInt(command.originVillageId), parseInt(command.targetVillageId), command.units, command.trCommandId, command.type, IS_MOBILE));
                     command.sent = true;
                     $('#' + command.buttonSendId + ' button').addClass('btn-confirm-yes');
                 }
@@ -982,9 +982,9 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
             return tbodyContent;
         }
 
-        function generateLink(villageId1, villageId2, unitInfo, idInfo, commandType) {
+        function generateLink(villageId1, villageId2, unitInfo, idInfo, commandType, forMobile) {
             if (DEBUG) console.debug(`${scriptInfo} Generating link for command from village ${villageId1} to village ${villageId2}`);
-            let completeLink = getCurrentURL();
+            let completeLink = forMobile ? '/game.php' : getCurrentURL();
             completeLink += twSDK.sitterId.length > 0 ? `?${twSDK.sitterId}&village=${villageId1}&screen=place&target=${villageId2}` : `?village=${villageId1}&screen=place&target=${villageId2}`;
 
             let villageUnits = unitObject[villageId1];
@@ -1057,7 +1057,7 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                         let units = sbPlans[planId][key].units;
                         modifyPlan(parseInt(planId), sbPlans[planId]);
                         if (DEBUG) console.debug(`${scriptInfo} Sending command from village ${originVillageId} to village ${targetVillageId}`);
-                        let sendLink = generateLink(originVillageId, targetVillageId, units, trCommandId, type);
+                        let sendLink = generateLink(originVillageId, targetVillageId, units, trCommandId, type, IS_MOBILE);
                         if (IS_MOBILE) {
                             window.location.href = sendLink;
                         } else {

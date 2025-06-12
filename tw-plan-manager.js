@@ -1,9 +1,9 @@
 /*
 * Script Name: Plan Manager
-* Version: v1.2.4
-* Last Updated: 2025-04-22
+* Version: v1.2.5
+* Last Updated: 2026-06-12
 * Author: SaveBank, gitnik (mobile fix)
-* Author Contact: Discord: savebank 
+* Author Contact: Discord: savebank, gitnik
 * Approved: Yes
 * Approved Date: 2024-05-02
 * Mod: RedAlert
@@ -1050,6 +1050,9 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                         modifyPlan(parseInt(planId), sbPlans[planId]);
                         if (DEBUG) console.debug(`${scriptInfo} Sending command from village ${originVillageId} to village ${targetVillageId}`);
                         let sendLink = generateLink(originVillageId, targetVillageId, units, trCommandId, type, IS_MOBILE);
+                        UI.InfoMessage(
+                          'Is Mobile: ' + IS_MOBILE, ' Link: ' + sendLink
+                        );
                         if (IS_MOBILE) {
                             window.location.href = sendLink;
                         } else {

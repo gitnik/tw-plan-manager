@@ -1028,11 +1028,18 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                 let isDeleteButton = buttonId.includes('buttondelete');
 
                 if (isSendButton) {
+                  UI.InfoMessage(
+                    'Is Mobile: ' + IS_MOBILE, ' Button ID: ' + buttonId
+                  );
                   if (IS_MOBILE) {
+                    UI.InfoMessage('1');
                     let sendButton = document.createElement("a");
-                    sendButton.innerHTML = "Send";
+                    UI.InfoMessage('2');
+                    sendButton.innerText = "Send";
                     sendButton.id = buttonId + "Send";
                     sendButton.classList.add("btn");
+
+                    UI.InfoMessage('3');
 
                     let [planId, _, commandId] = buttonId.split('-').map((x, i) => i !== 1 ? parseInt(x) : x);
                     let key;
@@ -1042,17 +1049,24 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                             break;
                         }
                     }
-                    sendButton.classList.add("btn-confirm-yes");
+
+                    UI.InfoMessage('4');
+
                     let originVillageId = parseInt(sbPlans[planId][key].originVillageId);
                     let targetVillageId = parseInt(sbPlans[planId][key].targetVillageId);
                     let trCommandId = sbPlans[planId][key].trCommandId;
                     let type = sbPlans[planId][key].type;
                     let units = sbPlans[planId][key].units;
+                    UI.InfoMessage('5');
                     sendButton.href = generateLink(originVillageId, targetVillageId, units, trCommandId, type, IS_MOBILE);
+
+                    UI.InfoMessage('6');
 
                     let sendParent = document.getElementById(buttonId);
                     sendParent.appendChild(sendButton);
+                    UI.InfoMessage('7');
                   } else {
+                    UI.InfoMessage('8');
                     let sendButton = document.createElement("button");
                     sendButton.innerHTML = "Send";
                     sendButton.id = buttonId + "Send";
@@ -1074,15 +1088,8 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                         let units = sbPlans[planId][key].units;
                         modifyPlan(parseInt(planId), sbPlans[planId]);
                         if (DEBUG) console.debug(`${scriptInfo} Sending command from village ${originVillageId} to village ${targetVillageId}`);
-                        let sendLink = generateLink(originVillageId, targetVillageId, units, trCommandId, type, IS_MOBILE);
-                        UI.InfoMessage(
-                          'Is Mobile: ' + IS_MOBILE, ' Link: ' + sendLink
-                        );
-                        if (IS_MOBILE) {
-                            window.location.href = sendLink;
-                        } else {
-                            window.open(sendLink, '_blank');
-                        }
+                        let sendLink = generateLink(originVillageId, targetVillageId, units, trCommandId, type);
+                        window.open(sendLink, '_blank');
                     }
                     sendButton.addEventListener('keydown', function (event) {
                         if (event.key === 'Enter') {

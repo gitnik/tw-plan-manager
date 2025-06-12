@@ -1063,6 +1063,7 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                       UI.InfoMessage('Link: ' + link);
                       sendButton.href = link;
                     } catch (error) {
+                      UI.InfoMessage('Error: ' + JSON.stringify(unitObject[originVillageId]));
                       UI.InfoMessage('Error: ' + error.message);
                       return;
                     }

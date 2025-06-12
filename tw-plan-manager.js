@@ -1,6 +1,6 @@
 /*
 * Script Name: Plan Manager
-* Version: v1.2.3
+* Version: v1.2.4
 * Last Updated: 2025-04-22
 * Author: SaveBank, gitnik (mobile fix)
 * Author Contact: Discord: savebank 
@@ -32,7 +32,7 @@ var scriptConfig = {
     scriptData: {
         prefix: 'sbAPM',
         name: 'Plan Manager',
-        version: 'v1.2.1',
+        version: 'v1.2.3',
         author: 'SaveBank',
         authorUrl: 'https://forum.tribalwars.net/index.php?members/savebank.131111/',
         helpLink: 'https://forum.tribalwars.net/index.php?threads/attack-plan-manager.292267/',
@@ -559,7 +559,7 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                 });
                 let commandsToSend = [];
                 for (let command of plan) {
-                    commandsToSend.push(generateLink(parseInt(command.originVillageId), parseInt(command.targetVillageId), command.units, command.trCommandId, command.type, IS_MOBILE));
+                    commandsToSend.push(generateLink(parseInt(command.originVillageId), parseInt(command.targetVillageId), command.units, command.trCommandId, command.type));
                     command.sent = true;
                     $('#' + command.buttonSendId + ' button').addClass('btn-confirm-yes');
                     if (commandsToSend.length >= number) break;
@@ -569,11 +569,7 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                 let delay = 200;
                 for (let link of commandsToSend) {
                     setTimeout(() => {
-                        if (IS_MOBILE) {
-                            window.location.href = link;
-                        } else {
-                            window.open(link, '_blank');
-                        }
+                        window.open(link, '_blank');
                     }, delay);
                     delay += 200;
                 }
@@ -594,7 +590,7 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                     let sendTimestamp = parseInt(command.sendTimestamp);
                     let remainingTimestamp = parseInt(sendTimestamp - timeNow);
                     if (remainingTimestamp > time) continue;
-                    commandsToSend.push(generateLink(parseInt(command.originVillageId), parseInt(command.targetVillageId), command.units, command.trCommandId, command.type, IS_MOBILE));
+                    commandsToSend.push(generateLink(parseInt(command.originVillageId), parseInt(command.targetVillageId), command.units, command.trCommandId, command.type));
                     command.sent = true;
                     $('#' + command.buttonSendId + ' button').addClass('btn-confirm-yes');
                 }
@@ -603,11 +599,7 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                 let delay = 0;
                 for (let link of commandsToSend) {
                     setTimeout(() => {
-                        if (IS_MOBILE) {
-                            window.location.href = link;
-                        } else {
-                            window.open(link, '_blank');
-                        }
+                        window.open(link, '_blank');
                     }, delay);
                     delay += 200;
                 }
